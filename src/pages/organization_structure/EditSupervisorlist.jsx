@@ -35,6 +35,7 @@ function EditSupervisorlist() {
     const [selectedDepartment, setSelectedDepartment] = useState('');
     const [selectedSupervisor, setSelectedSupervisor] = useState('');
     const [status, setStatus] = useState('');
+    const [departmentname, setDepartmentname] = useState('');
 
 
 
@@ -75,52 +76,53 @@ function EditSupervisorlist() {
 
     const handleSave = (e) => {
         e.preventDefault();
-    
+
         const requestData = {
             id: id,
             departmentrole_id: selectedDepartment,
             supervisor_id: selectedSupervisor,
+            dep_name: departmentname,
             status: status,
             updated_by: userempid
         };
-    
+
         axios.put('https://k21consulting.com/api/public/api/update_supervisor', requestData, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${usertoken}`
             }
         })
-        .then(response => {
-            const { status, message } = response.data;
-            if (status === 'success') {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: message,
-                });
-                // Assuming handleVisitsupervisorlist is a function defined elsewhere
-                handleVisitsupervisorlist();
-            } else if (status === 'error') {
+            .then(response => {
+                const { status, message } = response.data;
+                if (status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: message,
+                    });
+                    // Assuming handleVisitsupervisorlist is a function defined elsewhere
+                    handleVisitsupervisorlist();
+                } else if (status === 'error') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: message,
+                    });
+                } else {
+                    throw new Error('Unexpected response status');
+                }
+            })
+            .catch(error => {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: message,
+                    text: 'There was an error updating the Supervisor list. Please try again later.',
                 });
-            } else {
-                throw new Error('Unexpected response status');
-            }
-        })
-        .catch(error => {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'There was an error updating the Supervisor list. Please try again later.',
+
+                console.error('There was an error with the API:', error);
             });
-    
-            console.error('There was an error with the API:', error);
-        });
     };
-    
+
 
     const handleCancel = () => {
         handleVisitsupervisorlist()
@@ -144,6 +146,7 @@ function EditSupervisorlist() {
 
                     setSelectedDepartment(res.data.data.departmentrole_id);
                     setSelectedSupervisor(res.data.data.supervisor_id);
+                    setDepartmentname(res.data.data.dep_name);
                     setStatus(res.data.data.status);
                     setLoading(false);
                 }
@@ -204,7 +207,14 @@ function EditSupervisorlist() {
                             </Col>
                         </Row>
                         <Row className='mb-2 '>
-                            <Col>
+                            <Col mt={6}>
+                                <Form.Group controlId="formStatus">
+                                    <Form.Label style={{ fontWeight: 'bold' }}>Department Name</Form.Label>
+                                    <Form.Control type="text" placeholder="Enter Department Name" value={departmentname} onChange={(e) => setDepartmentname(e.target.value)} />
+                                   
+                                </Form.Group>
+                            </Col>
+                            <Col mt={6}>
                                 <Form.Group controlId="formStatus">
                                     <Form.Label style={{ fontWeight: 'bold' }}>Shift Status</Form.Label>
                                     <Form.Control as="select" value={status} onChange={(e) => setStatus(e.target.value)}>

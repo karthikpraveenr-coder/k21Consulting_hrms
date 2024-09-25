@@ -45,6 +45,9 @@ function Supervisorlist() {
     const [selectedSupervisor, setSelectedSupervisor] = useState('');
     const [initialData, setInitialData] = useState({ department: [], supervisorOptions: [] });
     const [status, setStatus] = useState('');
+    const [departmentname, setDepartmentname] = useState('');
+
+    
 
 
 
@@ -72,7 +75,7 @@ function Supervisorlist() {
                 }
             })
             .catch(error => {
-                console.error('Error fetching department and supervisor options:', error);
+                console.error('Error fetching Role and supervisor options:', error);
             });
     }, [usertoken]);
     const [formErrors, setFormErrors] = useState({})
@@ -86,11 +89,14 @@ function Supervisorlist() {
 
         // Validate shift slot
         if (!selectedDepartment) {
-            errors.selectedDepartment = 'Department is required';
+            errors.selectedDepartment = 'Role is required';
         }
 
         if (!selectedSupervisor) {
             errors.selectedSupervisor = 'Supervisor is required';
+        }
+        if (!departmentname) {
+            errors.departmentname = 'Department is required';
         }
         if (!status) {
             errors.status = 'Status is required';
@@ -107,6 +113,7 @@ function Supervisorlist() {
         const requestData = {
             departmentrole_id: selectedDepartment,
             supervisor_id: selectedSupervisor,
+            dep_name: departmentname,
             created_by: userempid,
             status: status
         };
@@ -285,8 +292,9 @@ function Supervisorlist() {
 
 
     const handleExportCSV = () => {
-        const csvData = tableData.map(({ department_name, supervisor_name, status, created_name, updated_name }, index) => ({
+        const csvData = tableData.map(({ dep_name,department_name, supervisor_name, status, created_name, updated_name }, index) => ({
             '#': index + 1,
+            dep_name,
             department_name,
             supervisor_name,
             status,
@@ -296,7 +304,8 @@ function Supervisorlist() {
 
         const headers = [
             { label: 'S.No', key: '#' },
-            { label: 'Department name', key: 'department_name' },
+            { label: 'Department name', key: 'dep_name' },
+            { label: 'Role name', key: 'department_name' },
             { label: 'Supervisor name', key: 'supervisor_name' },
             { label: 'Status', key: 'status' },
             { label: 'Created By', key: 'created_name' },
@@ -324,8 +333,9 @@ function Supervisorlist() {
         const size = 'A4'; // You can change to 'letter' or other sizes as needed
         const doc = new jsPDF('landscape', unit, size);
 
-        const data = tableData.map(({ department_name, supervisor_name, status, created_name, updated_name }, index) => [
+        const data = tableData.map(({ dep_name, department_name, supervisor_name, status, created_name, updated_name }, index) => [
             index + 1,
+            dep_name,
             department_name,
             supervisor_name,
             status,
@@ -334,7 +344,7 @@ function Supervisorlist() {
         ]);
 
         doc.autoTable({
-            head: [['S.No', 'Department name', 'Supervisor name', 'Status', 'Created By', 'Updated By']],
+            head: [['S.No', 'Department name', 'Role name', 'Supervisor name', 'Status', 'Created By', 'Updated By']],
             body: data,
             // styles: { fontSize: 10 },
             // columnStyles: { 0: { halign: 'center', fillColor: [100, 100, 100] } }, 
@@ -438,7 +448,7 @@ display: none !important;
                         <Row className='mb-2 '>
                             <Col>
                                 <Form.Group controlId="formDepartmentName">
-                                    <Form.Label style={{ fontWeight: 'bold' }}>Department Name</Form.Label>
+                                    <Form.Label style={{ fontWeight: 'bold' }}>Role Name</Form.Label>
                                     <Form.Select
                                         name="selectedDepartment"
                                         value={selectedDepartment}
@@ -466,6 +476,13 @@ display: none !important;
                             </Col>
                         </Row>
                         <Row className='mb-2 '>
+                        <Col mt={6}>
+                                <Form.Group controlId="formStatus">
+                                    <Form.Label style={{ fontWeight: 'bold' }}>Department Name</Form.Label>
+                                    <Form.Control type="text" placeholder="Enter Department Name" value={departmentname} onChange={(e) => setDepartmentname(e.target.value)} />
+                                    {formErrors.departmentname && <span className="text-danger">{formErrors.departmentname}</span>}
+                                </Form.Group>
+                            </Col>
                             <Col mt={6}>
                                 <Form.Group controlId="formStatus">
                                     <Form.Label style={{ fontWeight: 'bold' }}>Status</Form.Label>
@@ -519,6 +536,7 @@ display: none !important;
                                 <tr>
                                     <th scope="col">S.No</th>
                                     <th scope="col">Department Name</th>
+                                    <th scope="col">Role Name</th>
 
                                     <th scope="col">Supervisor Name</th>
                                     <th scope="col">Status</th>
@@ -544,6 +562,7 @@ display: none !important;
                                             return (
                                                 <tr key={row.id}>
                                                     <th scope="row">{serialNumber}</th>
+                                                    <td>{row.dep_name}</td>
                                                     <td>{row.department_name}</td>
                                                     <td>{row.supervisor_name}</td>
                                                     <td>{row.status}</td>
