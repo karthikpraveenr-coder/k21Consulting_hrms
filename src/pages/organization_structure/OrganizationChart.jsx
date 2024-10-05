@@ -56,7 +56,7 @@ export default function ColoredDemo() {
                 });
                 if (response.data.status === 'success') {
                     const formattedData = formatData(response.data.data);
-                    console.log("Formatted Data:", formattedData); // Debugging: log the formatted data
+                    console.log("Organization Data:", formattedData); 
                     setData(formattedData);
                 } else {
                     setError('Failed to fetch data');

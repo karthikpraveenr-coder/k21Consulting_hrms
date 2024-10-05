@@ -8,9 +8,24 @@
     border-color: #030303;
 }
 
-.p-node-toggler {
+/* .p-node-toggler {
+    display: none;
+} */
+
+.p-node-toggler{
+color:white
+}
+
+.p-organizationchart-lines.hidden {
+    visibility: hidden;
     display: none;
 }
+
+.p-organizationchart-lines.inherit {
+    visibility: inherit;
+    display: block;
+}
+
 
 
 .h-3rem {

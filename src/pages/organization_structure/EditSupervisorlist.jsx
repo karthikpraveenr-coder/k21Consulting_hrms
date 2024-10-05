@@ -158,7 +158,15 @@ function EditSupervisorlist() {
 
     // ------------------------------------------------------------------------------------------------
 
-
+    useEffect(() => {
+        // Filter supervisor options based on the initially selected department
+        if (selectedDepartment) {
+            const filteredSupervisors = departmentOptions.filter(option => option.id !== parseInt(selectedDepartment));
+            setSupervisorOptions(filteredSupervisors);
+        } else {
+            setSupervisorOptions(departmentOptions); // Show all supervisors when no department is selected
+        }
+    }, [selectedDepartment, departmentOptions]);
 
 
     return (
@@ -186,7 +194,7 @@ function EditSupervisorlist() {
                             <Col>
                                 <Form.Group controlId="formDepartmentName">
                                     <Form.Label style={{ fontWeight: 'bold' }}>Department Name</Form.Label>
-                                    <Form.Control as="select" onChange={handleDepartmentChange} value={selectedDepartment} disabled>
+                                    <Form.Control as="select" value={selectedDepartment} onChange={(e) => setSelectedDepartment(e.target.value)} disabled>
                                         <option value="">Select Department</option>
                                         {departmentOptions.map(option => (
                                             <option key={option.id} value={option.id}>{option.role_name}</option>
@@ -211,7 +219,7 @@ function EditSupervisorlist() {
                                 <Form.Group controlId="formStatus">
                                     <Form.Label style={{ fontWeight: 'bold' }}>Department Name</Form.Label>
                                     <Form.Control type="text" placeholder="Enter Department Name" value={departmentname} onChange={(e) => setDepartmentname(e.target.value)} />
-                                   
+
                                 </Form.Group>
                             </Col>
                             <Col mt={6}>

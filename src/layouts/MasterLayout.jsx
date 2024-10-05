@@ -178,6 +178,8 @@ import AddPurchaseInvoice from '../pages/Accounts/PurchaseInvoice/AddPurchaseInv
 import PurchaseInvoiceList from '../pages/Accounts/PurchaseInvoice/PurchaseInvoiceList'
 import EditPurchaseInvoice from '../pages/Accounts/PurchaseInvoice/EditPurchaseInvoice'
 import ViewSalesLeadList from '../pages/SalesManagement/Sales/ViewSalesLeadList'
+import OrgChartdummy from '../pages/organization_structure/Org'
+
 
 
 
@@ -444,6 +446,12 @@ function MasterLayout() {
                             <Route path="/addpurchaseinvoice" element={<AuthRoute><AddPurchaseInvoice /></AuthRoute>}/>
                             <Route path="/purchaseinvoicelist" element={<AuthRoute><PurchaseInvoiceList /></AuthRoute>}/>
                             <Route path="/editpurchaseinvoice/:id" element={<AuthRoute><EditPurchaseInvoice /></AuthRoute>}/>
+
+
+
+                            <Route path="/orgChartdummy" element={<AuthRoute><OrgChartdummy /></AuthRoute>}/>
+
+                         
 
 
 

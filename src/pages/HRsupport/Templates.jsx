@@ -189,6 +189,12 @@ function Templates() {
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes, delete it!',
+                preConfirm: (value) => {
+                    if (!value) {
+                        Swal.showValidationMessage('Reason is required for deletion.');
+                    }
+                    return value;
+                }
             });
 
             if (reason) {
